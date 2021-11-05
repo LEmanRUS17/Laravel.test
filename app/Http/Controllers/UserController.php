@@ -116,13 +116,15 @@ class UserController extends Controller
     public function pdf(Request $request, $id)
     {
         $user = User::find($id);
+        $pdf = PDF::loadView('users.pdf', compact('user'));
+
         if ($request->has('export')) {
             if ($request->get('export') == 'pdf') {
-                $pdf = PDF::loadView('users.pdf', compact('user'));
+
                 return $pdf->download("Пользователь: $user->Lastname.pdf");
             }
         }
 
-        return view('users.pdf', compact('user'));
+        return $pdf->stream('users.pdf');
     }
 }
